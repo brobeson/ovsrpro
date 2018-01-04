@@ -3,4 +3,4 @@ language: cpp
 services:
     - docker
 
-script: docker --version
+script: docker-compose --version
