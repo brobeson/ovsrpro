@@ -1,6 +1,2 @@
-sudo: required
 language: cpp
-services:
-    - docker
-
-script: docker-compose --version
+script: gcc --version
