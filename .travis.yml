@@ -1,2 +1,4 @@
 language: cpp
-script: ls -o
+script:
+  - mkdir ../build && cd ../build
+  - cmake -D XP_STEP=build ../ovsrpro
