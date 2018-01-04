@@ -1,2 +1,6 @@
+sudo: required
 language: cpp
-script: echo "Hello world."
+services:
+    - docker
+
+script: docker --version
