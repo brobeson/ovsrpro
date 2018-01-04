@@ -1,4 +1,12 @@
+sudo: required
 language: cpp
-script:
-  - mkdir ../build && cd ../build
-  - cmake -D XP_STEP=build ../ovsrpro
+services:
+    - docker
+
+before_install:
+    - docker pull centos:6.9
+    - docker run -d centos:6.9 -c "hostnamectl"
+
+script: hostnamectl
+#  - mkdir ../build && cd ../build
+#  - cmake -D XP_STEP=build ../ovsrpro
