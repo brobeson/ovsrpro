@@ -17,13 +17,13 @@ set(PRO_ZOOKEEPER
   NAME zookeeper
   WEB "Zookeeper" https://zookeeper.apache.org/ "Zookeeper - Home"
   LICENSE "open" http://www.apache.org/licenses/ "Apache V2.0"
-  DESC "Apache ZooKeeper is an effort to develop and maintain an open-source server which enables highly reliable distributed coordination."
+  DESC "Apache ZooKeeper is an effort to develop and maintain an open-source server which enables highly reliable distributed coordination. -- [windows-only patch](../patches/zookeeper-windows.patch)"
   REPO "repo" ${ZK_REPO} "Zookeeper main repo"
   VER ${ZK_VER}
   GIT_ORIGIN ${ZK_REPO}
   GIT_TAG release-${ZK_VER}
   DLURL ${ZK_REPO}/archive/release-${ZK_VER}.tar.gz
-  DLMD5 23df0e0bccf5d05d8190fd8ef459947c
+  DLMD5 790c9b028f2f9c6ed17938a396365b74
   DLNAME zookeeper-release-${ZK_VER}.tar.gz
   PATCH ${ZOO_PATCH} #This is only defined for Windows builds
 )
@@ -38,33 +38,6 @@ set(CPP_UNIT
   DLURL http://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/cppunit-1.12.1.tar.gz
   DLMD5 bd30e9cf5523cdfc019b94f5e1d7fd19
 )
-########################################
-# mkpatch_zookeeper
-function(mkpatch_zookeeper)
-  if(NOT (XP_DEFAULT OR XP_PRO_ZOOKEEPER))
-    return()
-  endif()
-
-  xpRepo(${PRO_ZOOKEEPER})
-endfunction(mkpatch_zookeeper)
-########################################
-# download
-function(download_zookeeper)
-  if(NOT (XP_DEFAULT OR XP_PRO_ZOOKEEPER))
-    return()
-  endif()
-
-  xpNewDownload(${PRO_ZOOKEEPER})
-endfunction(download_zookeeper)
-########################################
-# patch
-function(patch_zookeeper)
-  if(NOT (XP_DEFAULT OR XP_PRO_ZOOKEEPER))
-    return()
-  endif()
-
-  xpPatch(${PRO_ZOOKEEPER})
-endfunction(patch_zookeeper)
 ########################################
 # Some helper stuff to clean up the builds
 macro(zookeepercheckDependencies)
@@ -86,7 +59,7 @@ function(build_zookeeper)
   endif()
 
   if(NOT TARGET zookeeper)
-    patch_zookeeper()
+    xpPatchProject(${PRO_ZOOKEEPER})
   endif()
 
   zookeeperCheckDependencies()
@@ -139,7 +112,7 @@ function(build_zookeeper)
     endforeach()
   else()
     # This is only needed for non-windows build
-    xpNewDownload(${CPP_UNIT})
+    xpDownloadProject(${CPP_UNIT})
 
     set(ACLOCAL_STR "aclocal -I ${SOURCE_DIR}/src/c/cppunit-${CPP_UNIT_VER}")
     ExternalProject_Add(zookeeper_configure DEPENDS zookeeper_ant download_cppunit-${CPP_UNIT_VER}.tar.gz

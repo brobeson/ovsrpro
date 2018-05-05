@@ -11,9 +11,9 @@
 # path (e.g. C:/Program Files/ovsrpro 0.0.1-vc120-64/qt5)
 ########################################
 xpProOption(qt5)
-set(QT5_VER 5.8.0)
+set(QT5_VER 5.10.0)
 set(QT5_REPO http://code.qt.io/cgit/qt/qt5.git)
-set(QT5_DOWNLOAD_FILE qt-everywhere-opensource-src-${QT5_VER}.tar.gz)
+set(QT5_DOWNLOAD_FILE qt-everywhere-src-${QT5_VER}.tar.xz)
 set(PRO_QT5
   NAME qt5
   WEB "Qt" http://qt.io/ "Qt - Home"
@@ -23,9 +23,8 @@ set(PRO_QT5
   VER ${QT5_VER}
   GIT_ORIGIN ${QT5_REPO}
   GIT_TAG v${QT5_VER}
-  DLURL http://download.qt.io/archive/qt/5.8/${QT5_VER}/single/${QT5_DOWNLOAD_FILE}
-  DLMD5 a9f2494f75f966e2f22358ec367d8f41
-  PATCH ${PATCH_DIR}/qt5.patch
+  DLURL http://download.qt.io/archive/qt/5.10/${QT5_VER}/single/${QT5_DOWNLOAD_FILE}
+  DLMD5 c5e275ab0ed7ee61d0f4b82cd471770d
 )
 
 #######################################
@@ -66,7 +65,7 @@ macro(setConfigureOptions)
     list(APPEND QT5_CONFIGURE -platform win32-msvc2013 -qmake -mp)
   else()
     list(APPEND QT5_CONFIGURE -platform linux-g++
-      -c++std c++11
+      -c++std c++14
       -qt-xcb
       -qt-xkbcommon-x11
       -fontconfig
@@ -82,59 +81,7 @@ macro(setConfigureOptions)
       -no-gstreamer)
   endif() # OS type
 endmacro(setConfigureOptions)
-#######################################
-# mkpatch_qt5 - initialize and clone the main repository
-function(mkpatch_qt5)
-  if(NOT (XP_DEFAULT OR XP_PRO_QT5))
-    return()
-  endif()
-
-  xpRepo(${PRO_QT5})
-endfunction(mkpatch_qt5)
 ########################################
-# download - initialize the git submodules
-function(download_qt5)
-  if(NOT (XP_DEFAULT OR XP_PRO_QT5))
-    return()
-  endif()
-
-  xpNewDownload(${PRO_QT5})
-endfunction(download_qt5)
-########################################
-# patch - remove any of the unwanted submodules
-function(patch_qt5)
-  if(NOT (XP_DEFAULT OR XP_PRO_QT5))
-    return()
-  endif()
-
-  xpPatch(${PRO_QT5})
-
-  ExternalProject_Get_Property(qt5 SOURCE_DIR)  
-  # if this didn't come from the repo (direct download) need to
-  # add a .gitignore...it is used by the configure scripts to
-  # determine whether to compile the configure.exe
-  if (NOT EXISTS ${SOURCE_DIR}/qtbase/.gitignore)
-    ExternalProject_Add_Step(qt5 qt5_add_gitignore
-      COMMENT "Creating empty gitignore file"
-      WORKING_DIRECTORY ${SOURCE_DIR}
-      COMMAND ${CMAKE_COMMAND} -E touch ${SOURCE_DIR}/qtbase/.gitignore
-      DEPENDEES download)
-  endif()
-
-  # setup the mkspec file appropriately for static/dynamic
-  if(WIN32)
-    if(${XP_BUILD_STATIC})
-      set(QT5_MKSPEC ${PATCH_DIR}/qt5-msvc-desktop-mt.conf)
-    else()
-      set(QT5_MKSPEC ${PATCH_DIR}/qt5-msvc-desktop-md.conf)
-    endif()
-
-    ExternalProject_Add_Step(qt5 qt5_setup_mkspec
-      COMMENT "Preparing MKSPEC"
-      COMMAND ${CMAKE_COMMAND} -E copy ${QT5_MKSPEC} ${SOURCE_DIR}/qtbase/mkspecs/common/msvc-desktop.conf
-      DEPENDEES download)
-  endif()
-endfunction(patch_qt5)
 macro(qt5CheckDependencies)
   find_program(gperf gperf)
   if (${gperf} STREQUAL "gperf-NOTFOUND")
@@ -185,11 +132,6 @@ function(build_qt5)
     return()
   endif()
 
-  # Make sure the qt5 target this depends on has been created
-  if(NOT TARGET qt5)
-    patch_qt5()
-  endif()
-
   qt5CheckDependencies()
 
   setConfigureOptions()
@@ -203,7 +145,7 @@ function(build_qt5)
     set(XP_INCLUDE_DIR ${XP_ROOTDIR}/include) # for open ssl
     set(OPENSSL_LIB_DIR ${XP_ROOTDIR}/lib) # for open ssl
     set(MAKE_CMD nmake)
-    set(ADDITIONAL_CONFIG "set _CL_=%_CL_% /I'${XP_INCLUDE_DIR}' /I'${STAGE_DIR}/include/psql' &&
+    set(ADDITIONAL_CFG "set _CL_=%_CL_% /I'${XP_INCLUDE_DIR}' /I'${STAGE_DIR}/include/psql' &&
                            set LIB=${OPENSSL_LIB_DIR}\;${STAGE_DIR}/lib\;%LIB% &&")
   else()
     set(MAKE_CMD $(MAKE))
@@ -217,8 +159,8 @@ function(build_qt5)
     BUILD_COMMAND ${ADDITIONAL_CFG} ${MAKE_CMD}
     BUILD_IN_SOURCE 1
     INSTALL_COMMAND
-      ${MAKE_CMD} install  &&
-      ${CMAKE_COMMAND} -E copy ${PATCH_DIR}/qt.conf ${STAGE_DIR}/qt5/bin/qt.conf
+      ${MAKE_CMD} install # &&
+   #   ${CMAKE_COMMAND} -E copy ${PATCH_DIR}/qt.conf ${STAGE_DIR}/qt5/bin/qt.conf
   )
   add_dependencies(qt5_build psql_Release)
 
@@ -235,9 +177,7 @@ function(build_qt5)
       ${CMAKE_COMMAND} -E copy ${SOURCE_DIR}/LICENSE.GPLv3 ${STAGE_DIR}/share/qt5 &&
       ${CMAKE_COMMAND} -E copy ${SOURCE_DIR}/LICENSE.LGPLv21 ${STAGE_DIR}/share/qt5 &&
       ${CMAKE_COMMAND} -E copy ${SOURCE_DIR}/LICENSE.LGPLv3 ${STAGE_DIR}/share/qt5 &&
-      ${CMAKE_COMMAND} -E copy ${SOURCE_DIR}/LICENSE.PREVIEW.COMMERCIAL ${STAGE_DIR}/share/qt5 &&
       ${CMAKE_COMMAND} -E copy ${DOWNLOAD_DIR}/${QT5_DOWNLOAD_FILE} ${STAGE_DIR}/share/qt5 &&
-      ${CMAKE_COMMAND} -E copy ${PATCH_DIR}/qt5.patch ${STAGE_DIR}/share/qt5 &&
       ${CMAKE_COMMAND} -E echo "Compile flags used when building the library: '${QT5_CONFIGURE}'" > ${STAGE_DIR}/share/qt5/compileFlags
   )
 

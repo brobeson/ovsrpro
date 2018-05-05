@@ -26,38 +26,43 @@ set(QT5_PLUGIN_PATH ${OP_ROOTDIR}/qt5/plugins)
 set(QT5_LIBEXEC_PATH ${OP_ROOTDIR}/qt5/libexec)
 set(QT5_RESOURCE_PATH ${OP_ROOTDIR}/qt5/resources)
 
+# if the user did not specify components, locate all of them
+if (NOT DEFINED Qt5_LIBRARIES)
+  set(Qt5_LIBRARIES
+    Concurrent
+    Core
+    DBus
+    Gui
+    Multimedia
+    MultimediaWidgets
+    Network
+    OpenGL
+    Sql
+    Svg
+    Test
+    WebChannel
+    WebEngine
+    WebEngineCore
+    WebEngineWidgets
+    WebSockets
+    WebView
+    Widgets
+    Xml
+    XmlPatterns)
+endif()
+
 # find the Qt5 package
-# Note - This is not an exhaustive list, if new ones are needed add them here and
-# any additional library requirements below (see opAddLinkLibs calls below)
-find_package(Qt5 REQUIRED COMPONENTS
-               Concurrent
-               Core
-               DBus
-               Gui
-               Multimedia
-               MultimediaWidgets
-               Network
-               OpenGL
-               Sql
-               Svg
-               Test
-               WebChannel
-               WebEngine
-               WebEngineCore
-               WebEngineWidgets
-               WebSockets
-               WebView
-               Widgets
-               Xml
-               XmlPatterns
-             PATHS ${QT5_BASE_PATH}/lib/cmake/Qt5
-             NO_CMAKE_PATH
-             NO_CMAKE_ENVIRONMENT_PATH
-             NO_SYSTEM_ENVIRONMENT_PATH
-             NO_CMAKE_BUILDS_PATH
-             NO_CMAKE_PACKAGE_REGISTRY
-             NO_CMAKE_SYSTEM_PATH
-             NO_CMAKE_SYSTEM_PACKAGE_REGISTRY)
+find_package(Qt5
+  REQUIRED
+  COMPONENTS ${Qt5_LIBRARIES}
+  PATHS ${QT5_BASE_PATH}/lib/cmake/Qt5
+  NO_CMAKE_PATH
+  NO_CMAKE_ENVIRONMENT_PATH
+  NO_SYSTEM_ENVIRONMENT_PATH
+  NO_CMAKE_BUILDS_PATH
+  NO_CMAKE_PACKAGE_REGISTRY
+  NO_CMAKE_SYSTEM_PATH
+  NO_CMAKE_SYSTEM_PACKAGE_REGISTRY)
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} build_type)
 

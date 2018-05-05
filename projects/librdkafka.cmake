@@ -9,7 +9,7 @@ set(PRO_LIBRDKAFKA
   NAME librdkafka
   WEB "librdkafka" ${REPO_UPSTREAM} "librdkafka on github"
   LICENSE "open" ${REPO_UPSTREAM}/blob/master/LICENSE "2-clause BSD license"
-  DESC "librdkafka is a C library implementation of the Apache Kafka protocol, containing both Producer and Consumer support"
+  DESC "librdkafka is a C library implementation of the Apache Kafka protocol, containing both Producer and Consumer support -- [windows-only patch](../patches/librdkafka-windows.patch)"
   REPO "repo" ${REPO} "distributePro fork of librdkafka repo on github"
   VER ${VER}
   GIT_ORIGIN git://github.com/distributepro/librdkafka.git
@@ -23,31 +23,13 @@ set(PRO_LIBRDKAFKA
   DIFF ${REPO}/compare/edenhill:
   )
 ########################################
-# mkpatch_librdkafka
-function(mkpatch_librdkafka)
-  if(NOT (XP_DEFAULT OR XP_PRO_LIBRDKAFKA))
-    return()
-  endif()
-
-  xpRepo(${PRO_LIBRDKAFKA})
-endfunction(mkpatch_librdkafka)
-########################################
-# download
-function(download_librdkafka)
-  if(NOT (XP_DEFAULT OR XP_PRO_LIBRDKAFKA))
-    return()
-  endif()
-
-  xpNewDownload(${PRO_LIBRDKAFKA})
-endfunction(download_librdkafka)
-########################################
 # patch
 function(patch_librdkafka)
   if(NOT (XP_DEFAULT OR XP_PRO_LIBRDKAFKA))
     return()
   endif()
 
-  xpPatch(${PRO_LIBRDKAFKA})
+  xpPatchProject(${PRO_LIBRDKAFKA})
 
   #TODO Verify that this patch is still necessary now that it is being built via Cmake
   if(WIN32)

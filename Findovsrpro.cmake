@@ -4,6 +4,8 @@
 # should match xpGetCompilerPrefix in externpro's xpfunmac.cmake
 # NOTE: wanted to use externpro version, but chicken-egg problem
 function(getCompilerPrefix _ret)
+  set(options GCC_TWO_VER)
+  cmake_parse_arguments(x "${options}" "" "" ${ARGN})
   if(MSVC)
     if(MSVC14)
       set(prefix vc140)
@@ -28,13 +30,18 @@ function(getCompilerPrefix _ret)
     endif()
   elseif(CMAKE_COMPILER_IS_GNUCXX)
     exec_program(${CMAKE_CXX_COMPILER}
-      ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
+      ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpfullversion -dumpversion
       OUTPUT_VARIABLE GCC_VERSION
       )
-    string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)?" "\\1\\2\\3"
-      GCC_VERSION ${GCC_VERSION}
+    if(X_GCC_TWO_VER)
+      set(digits "\\1\\1")
+    else()
+      set(digits "\\1\\2\\3")
+    endif()
+    string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)?"
+      "gcc${digits}"
+      prefix ${GCC_VERSION}
       )
-    set(prefix gcc${GCC_VERSION})
   elseif(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") # LLVM/Apple Clang (clang.llvm.org)
     if(${CMAKE_SYSTEM_NAME} STREQUAL Darwin)
       exec_program(${CMAKE_CXX_COMPILER}

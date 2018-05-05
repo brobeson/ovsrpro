@@ -14,26 +14,12 @@ set(PRO_HDF5
   PATCH ${PATCH_DIR}/hdf5.patch
 )
 ########################################
-function(mkpatch_hdf5)
-  if(NOT (XP_DEFAULT OR XP_PRO_HDF5))
-    return()
-  endif()
-  xpRepo(${PRO_HDF5})
-endfunction()
-########################################
-function(download_hdf5)
-  if(NOT (XP_DEFAULT OR XP_PRO_HDF5))
-    return()
-  endif()
-  xpNewDownload(${PRO_HDF5})
-endfunction()
-########################################
 function(patch_hdf5)
   if(NOT (XP_DEFAULT OR XP_PRO_HDF5))
     return()
   endif()
 
-  xpPatch(${PRO_HDF5})
+  xpPatchProject(${PRO_HDF5})
 
   if(WIN32)
     if(${XP_BUILD_STATIC})

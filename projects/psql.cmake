@@ -22,28 +22,12 @@ set(PRO_PSQL
   DLMD5 7fea4bf5f9211f4d464a68b2b65ad9e1
 )
 #######################################
-function(mkpatch_psql)
-  if(NOT (XP_DEFAULT OR XP_PRO_PSQL))
-    return()
-  endif()
-
-  xpRepo(${PRO_PSQL})
-endfunction()
-#######################################
-function(download_psql)
-  if(NOT (XP_DEFAULT OR XP_PRO_PSQL))
-    return()
-  endif()
-
-  xpNewDownload(${PRO_PSQL})
-endfunction()
-#######################################
 function(patch_psql)
   if(NOT (XP_DEFAULT OR XP_PRO_PSQL))
     return()
   endif()
 
-  xpPatch(${PRO_PSQL})
+  xpPatchProject(${PRO_PSQL})
 
   if(WIN32)
     if(${XP_BUILD_STATIC})

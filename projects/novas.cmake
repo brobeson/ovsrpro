@@ -21,14 +21,6 @@ set(PRO_NOVAS
   PATCH ${PATCH_DIR}/novas.patch
 )
 ########################################
-function(patch_novas)
-  if(NOT (XP_DEFAULT OR XP_PRO_NOVAS))
-    return()
-  endif()
-
-  xpPatch(${PRO_NOVAS})
-endfunction()
-########################################
 function(build_novas)
   if (NOT (XP_DEFAULT OR XP_PRO_NOVAS))
     return()

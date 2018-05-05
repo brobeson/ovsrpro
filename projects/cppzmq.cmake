@@ -4,16 +4,17 @@
 xpProOption(cppzmq)
 set(CPPZMQ_VER 4.2.1)
 set(CPPZMQ_SRC_PATH ${CMAKE_BINARY_DIR}/xpbase/Source/cppzmq)
-set(CPPZMQ_DLURL https://github.com/zeromq/cppzmq/archive/v${CPPZMQ_VER}.tar.gz)
-set(CPPZMQ_DLMD5 72d1296f26341d136470c25320936683)
+set(REPO https://github.com/zeromq/cppzmq)
 set(PRO_CPPZMQ
   NAME cppzmq
-  WEB "CPPZMQ" https://github.com/zeromq/cppzmq "CPPZMQ"
-  LICENSE "MIT" https://github.com/zeromq/cppzmq/blob/v${CPPZMQ_VER}/LICENSE "MIT"
-  DESC "CPPZMQ is a minimal c++ binding to the libzmq functions."
+  WEB "cppzmq" ${REPO} "cppzmq"
+  LICENSE "MIT" ${REPO}/blob/v${CPPZMQ_VER}/LICENSE "MIT"
+  DESC "cppzmq is a minimal c++ binding to the libzmq functions."
+  REPO "repo" ${REPO}/tree/v${CPPZMQ_VER} "cppzmq repo on github"
   VER ${CPPZMQ_VER}
-  DLURL ${CPPZMQ_DLURL}
-  DLMD5 ${CPPZMQ_DLMD5}
+  DLURL ${REPO}/archive/v${CPPZMQ_VER}.tar.gz
+  DLMD5 72d1296f26341d136470c25320936683
+  DLNAME cppzmq-${CPPZMQ_VER}.tar.gz
 )
 ########################################
 function(build_cppzmq)

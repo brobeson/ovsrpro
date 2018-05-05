@@ -4,13 +4,11 @@ builds overseer [projects](projects/README.md) by leveraging externpro
 
 Supports compiling the following projects from source for both Windows and Linux:
 - CPPZMQ (https://github.com/zeromq/cppzmq)
-- FFmpeg (https://www.ffmpeg.org)
 - GLEW (http://glew.sourceforge.net)
 - HDF5 (http://www.hdfgroup.org)
 - MIT Kerberos (http://web.mit.edu/kerberos)
 - librdkafka (https://github.com/edenhill/librdkafka)
 - NOVAS (http://aa.usno.navy.mil/software/novas/novas\_info.php)
-- OpenH264 (http://www.openh264.org)
 - PostreSQL (http://www.postresql.org)
 - Qt5 (http://code.qt.io)
 - Qwt (http://qwt.sourceforge.net)
@@ -18,8 +16,6 @@ Supports compiling the following projects from source for both Windows and Linux
 - ZooKeeper (https://github.com/apache/zookeeper.git)
 
 Depends on an installed version of externpro (https://github.com/smanders/externpro).
-
-YASM assembler is expected to be present for building FFmpeg and OpenH264 projects.
 
 Some additional packages may need to be installed for the Qt Web modules to build, here is a list of ones that commonly need to be installed on a CentOS 6 system (additional ones may be required depending on system configuration):
 
@@ -67,13 +63,11 @@ For custom builds, the following cmake options are available (via the -D option)
 
 Available package options when XP\_DEFAULT=0 or is not defined
 - XP\_PRO\_CPPZMQ - build the cppzmq package (depends on zeromq)
-- XP\_PRO\_FFMPEG - build the FFmpeg package
 - XP\_PRO\_GLEW - build the GLEW package
 - XP\_PRO\_HDF5 - build the HDF5 package
 - XP\_PRO\_KERBEROS - build the MIT kerberos package
 - XP\_PRO\_LIBRDKAFKA - build the librdkafka package
 - XP\_PRO\_NOVAS - build the novas package
-- XP\_PRO\_OPENH264 - build the OpenH264 package
 - XP\_PRO\_PSQL - build the postgresql package
 - XP\_PRO\_QT5 - build the qt5 package
 - XP\_PRO\_QWT - build the qwt package

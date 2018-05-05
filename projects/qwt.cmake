@@ -3,43 +3,17 @@
 ########################################
 xpProOption(qwt)
 ########################################
-set(QWT_DL_URL https://sourceforge.net/projects/qwt/files/qwt/6.1.2/qwt-6.1.2.tar.bz2/download)
-set(QWT_DL_MD5 9c88db1774fa7e3045af063bbde44d7d)
-
+set(VER 6.1.2)
 set(PRO_QWT
   NAME qwt
   WEB "Qwt" http://http://qwt.sourceforge.net/ "Qwt - Qt Widgets for Technical Applications"
   LICENSE "LGPL" http://qwt.sourceforge.net/qwtlicense.html "LGPL with exceptions"
   DESC "The Qwt library contains GUI Components and utility classes which are primarily useful for programs with a technical background."
-  VER 6.1.2
-  DLURL ${QWT_DL_URL}
-  DLMD5 ${QWT_DL_MD5}
+  VER ${VER}
+  DLURL https://downloads.sourceforge.net/project/qwt/qwt/${VER}/qwt-${VER}.tar.bz2
+  DLMD5 9c88db1774fa7e3045af063bbde44d7d
   PATCH ${PATCH_DIR}/qwtconfig.pri.patch  
 )
-########################################
-function(mkpatch_qwt)
-  if(NOT (XP_DEFAULT OR XP_PRO_QWT))
-    return()
-  endif()
-
-  xpRepo(${PRO_QWT})
-endfunction()
-########################################
-function(download_qwt)
-  if(NOT (XP_DEFAULT OR XP_PRO_QWT))
-    return()
-  endif()
-
-  xpNewDownload(${PRO_QWT})
-endfunction()
-########################################
-function(patch_qwt)
-  if(NOT (XP_DEFAULT OR XP_PRO_QWT))
-    return()
-  endif()
-
-  xpPatch(${PRO_QWT})
-endfunction()
 ########################################
 function(build_qwt)
   if(NOT (XP_DEFAULT OR XP_PRO_QWT))
@@ -47,7 +21,7 @@ function(build_qwt)
   endif()
 
   if(NOT TARGET qwt)
-    patch_qwt()
+    xpPatchProject(${PRO_QWT})
   endif()
 
   # Make sure the qt5 target this depends on has been created
