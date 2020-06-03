@@ -39,7 +39,6 @@ macro(setConfigureOptions)
     -qt-libjpeg
     -system-freetype
     -opengl desktop
-    -openssl
     -sql-psql
     -psql_config ${STAGE_DIR}/bin/pg_config
     -opensource
