@@ -1,5 +1,5 @@
 xpProOption(hdf5)
-set(HDF5_VERSION 1.8.16)
+set(HDF5_VERSION 1.12.0)
 string(REPLACE "." "_" HDF5_TAG "${HDF5_VERSION}")
 set(PRO_HDF5
   NAME hdf5
@@ -7,8 +7,8 @@ set(PRO_HDF5
   LICENSE "open" https://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/COPYING "HDF5 License"
   DESC "HDF5 is a data model, library, and file format for storing and managing data"
   VER ${HDF5_VERSION}
-  DLURL http://www.hdfgroup.org/ftp/HDF5/prev-releases/hdf5-1.8/hdf5-${HDF5_VERSION}/src/CMake-hdf5-${HDF5_VERSION}.tar.gz
-  DLMD5 a7559a329dfe74e2dac7d5e2d224b1c2
+  DLURL http://www.hdfgroup.org/ftp/HDF5/prev-releases/hdf5-1.12/hdf5-${HDF5_VERSION}/src/CMake-hdf5-${HDF5_VERSION}.tar.gz
+  DLMD5 33ab3d5b9019ca468364d226e0ccdea6
   PATCH ${PATCH_DIR}/hdf5.patch
   REPO https://github.com/HDFGroup/hdf5
   GIT_ORIGIN git://github.com/HDFGroup/hdf5.git
