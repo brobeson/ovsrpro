@@ -3,11 +3,11 @@ project(ovsrpro)
 if(NOT CMAKE_COMPILER_IS_GNUCXX)
   message(WARNING "${CMAKE_CXX_COMPILER} is not supported.")
 endif()
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}) # Findexternpro.cmake
-set(externpro_REV 18.08.4)
-find_package(externpro REQUIRED)
-list(APPEND CMAKE_MODULE_PATH ${externpro_DIR}/share/cmake)
-include(macpro)
+
+# Download some files from externpro and modify them in place.
+include(cmake/DownloadExternpro.cmake)
+
+include(modules/macpro.cmake)
 proInit()
 proAddProjectDir(projects)
 set(CPACK_PACKAGE_CHECKSUM SHA256)

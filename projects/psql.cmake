@@ -61,7 +61,6 @@ function(build_psql)
   if(NOT TARGET psql)
     patch_psql()
   endif()
-  xpFindPkg(PKGS openssl)
   configure_file(
     "${CMAKE_SOURCE_DIR}/cmake/Findpsql.cmake"
     "${STAGE_DIR}/share/cmake/Findpsql.cmake"

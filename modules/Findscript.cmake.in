@@ -1,0 +1,124 @@
+# - Find an @CMAKE_PROJECT_NAME@ installation.
+# @CMAKE_PROJECT_NAME@_DIR
+################################################################################
+# should match xpGetCompilerPrefix in externpro's xpfunmac.cmake
+# NOTE: wanted to use externpro version, but chicken-egg problem
+function(getCompilerPrefix _ret)
+  set(options GCC_TWO_VER)
+  cmake_parse_arguments(X "${options}" "" "" ${ARGN})
+  if(MSVC)
+    if(MSVC_VERSION GREATER 1910 AND MSVC_VERSION LESS 1919) # VS 15.0 2017
+      set(prefix vc141)
+    elseif(MSVC_VERSION EQUAL 1900) # VS 14.0 2015
+      set(prefix vc140)
+    elseif(MSVC_VERSION EQUAL 1800) # VS 12.0 2013
+      set(prefix vc120)
+    elseif(MSVC_VERSION EQUAL 1700) # VS 11.0 2012
+      set(prefix vc110)
+    elseif(MSVC_VERSION EQUAL 1600) # VS 10.0 2010
+      set(prefix vc100)
+    elseif(MSVC_VERSION EQUAL 1500) # VS 9.0 2008
+      set(prefix vc90)
+    else()
+      message(SEND_ERROR "Find@CMAKE_PROJECT_NAME@.cmake: MSVC compiler support lacking")
+    endif()
+  elseif(CMAKE_COMPILER_IS_GNUCXX)
+    exec_program(${CMAKE_CXX_COMPILER}
+      ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpfullversion -dumpversion
+      OUTPUT_VARIABLE GCC_VERSION
+      )
+    if(X_GCC_TWO_VER)
+      set(digits "\\1\\2")
+    else()
+      set(digits "\\1\\2\\3")
+    endif()
+    string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)?"
+      "gcc${digits}"
+      prefix ${GCC_VERSION}
+      )
+  elseif(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") # LLVM/Apple Clang (clang.llvm.org)
+    if(${CMAKE_SYSTEM_NAME} STREQUAL Darwin)
+      exec_program(${CMAKE_CXX_COMPILER}
+        ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
+        OUTPUT_VARIABLE CLANG_VERSION
+        )
+      string(REGEX REPLACE "([0-9]+)\\.([0-9]+)(\\.[0-9]+)?"
+        "clang-darwin\\1\\2" # match boost naming
+        prefix ${CLANG_VERSION}
+        )
+    else()
+      string(REGEX REPLACE "([0-9]+)\\.([0-9]+)(\\.[0-9]+)?"
+        "clang\\1\\2" # match boost naming
+        prefix ${CMAKE_CXX_COMPILER_VERSION}
+        )
+    endif()
+  else()
+    message(SEND_ERROR "Find@CMAKE_PROJECT_NAME@.cmake: compiler support lacking: ${CMAKE_CXX_COMPILER_ID}")
+  endif()
+  set(${_ret} ${prefix} PARENT_SCOPE)
+endfunction()
+function(getNumBits _ret)
+  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(numBits 64)
+  elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(numBits 32)
+  else()
+    message(FATAL_ERROR "numBits not 64 or 32")
+  endif()
+  set(${_ret} ${numBits} PARENT_SCOPE)
+endfunction()
+################################################################################
+# TRICKY: clear cached variables each time we cmake so we can change
+# @CMAKE_PROJECT_NAME@_REV and reuse the same build directory
+unset(@CMAKE_PROJECT_NAME@_DIR CACHE)
+################################################################################
+# find the path to the @CMAKE_PROJECT_NAME@ directory
+getCompilerPrefix(COMPILER)
+getNumBits(BITS)
+set(@CMAKE_PROJECT_NAME@_SIG ${@CMAKE_PROJECT_NAME@_REV}-${COMPILER}-${BITS})
+set(PFX86 "ProgramFiles(x86)")
+find_path(@CMAKE_PROJECT_NAME@_DIR
+  NAMES
+    @CMAKE_PROJECT_NAME@_${@CMAKE_PROJECT_NAME@_SIG}.txt
+  PATHS
+    # build versions
+    C:/src/@CMAKE_PROJECT_NAME@/_bld/@CMAKE_PROJECT_NAME@_${@CMAKE_PROJECT_NAME@_SIG}
+    ~/src/@CMAKE_PROJECT_NAME@/_bld/@CMAKE_PROJECT_NAME@_${@CMAKE_PROJECT_NAME@_SIG}
+    # environment variable - build versions
+    "$ENV{@CMAKE_PROJECT_NAME@_BUILD_DIR}/@CMAKE_PROJECT_NAME@_${@CMAKE_PROJECT_NAME@_SIG}"
+    # environment variable - installed versions
+    "$ENV{extern_DIR}/@CMAKE_PROJECT_NAME@ ${@CMAKE_PROJECT_NAME@_SIG}"
+    "$ENV{extern_DIR}/@CMAKE_PROJECT_NAME@-${@CMAKE_PROJECT_NAME@_SIG}-${CMAKE_SYSTEM_NAME}"
+    # installed versions
+    "$ENV{ProgramW6432}/@CMAKE_PROJECT_NAME@ ${@CMAKE_PROJECT_NAME@_SIG}"
+    "$ENV{${PFX86}}/@CMAKE_PROJECT_NAME@ ${@CMAKE_PROJECT_NAME@_SIG}"
+    "~/extern/@CMAKE_PROJECT_NAME@-${@CMAKE_PROJECT_NAME@_SIG}-${CMAKE_SYSTEM_NAME}"
+    "/opt/extern/@CMAKE_PROJECT_NAME@-${@CMAKE_PROJECT_NAME@_SIG}-${CMAKE_SYSTEM_NAME}"
+  DOC "@CMAKE_PROJECT_NAME@ directory"
+  )
+if(NOT @CMAKE_PROJECT_NAME@_DIR)
+  if(DEFINED @CMAKE_PROJECT_NAME@_INSTALLER_LOCATION)
+    message(FATAL_ERROR "@CMAKE_PROJECT_NAME@ ${@CMAKE_PROJECT_NAME@_SIG} not found.\n${@CMAKE_PROJECT_NAME@_INSTALLER_LOCATION}")
+  else()
+    message(FATAL_ERROR "@CMAKE_PROJECT_NAME@ ${@CMAKE_PROJECT_NAME@_SIG} not found")
+  endif()
+else()
+  set(moduleDir ${@CMAKE_PROJECT_NAME@_DIR}/share/cmake)
+  set(findFile ${moduleDir}/Find@CMAKE_PROJECT_NAME@.cmake)
+  execute_process(COMMAND ${CMAKE_COMMAND} -E compare_files ${CMAKE_CURRENT_LIST_FILE} ${findFile}
+    RESULT_VARIABLE filesDiff
+    OUTPUT_QUIET
+    ERROR_QUIET
+    )
+  if(filesDiff)
+    message(STATUS "local: ${CMAKE_CURRENT_LIST_FILE}.")
+    message(STATUS "@CMAKE_PROJECT_NAME@: ${findFile}.")
+    message(AUTHOR_WARNING "Find scripts don't match. You may want to update the local with the @CMAKE_PROJECT_NAME@ version.")
+  endif()
+  message(STATUS "Found @CMAKE_PROJECT_NAME@: ${@CMAKE_PROJECT_NAME@_DIR}")
+  list(APPEND XP_MODULE_PATH ${moduleDir})
+  link_directories(${@CMAKE_PROJECT_NAME@_DIR}/lib)
+  if(EXISTS ${moduleDir}/xpfunmac.cmake)
+    include(${moduleDir}/xpfunmac.cmake)
+  endif()
+endif()
