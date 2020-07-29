@@ -1,0 +1,39 @@
+# WARNING
+# This file is downloaded and modified by CMake.
+# Manual edits will be overwritten.
+
+diff --git a/src/tools/gcc.jam b/src/tools/gcc.jam
+index 0f346a5..a8461df 100644
+--- a/src/tools/gcc.jam
++++ b/src/tools/gcc.jam
+@@ -100,7 +100,7 @@ rule init ( version ? : command * : options * )
+                 local tool-command-string = \"$(tool-command)\" ;
+                 tool-command-string = $(tool-command-string:J=" ") ;
+                 local tool-version = [ MATCH "^([0-9.]+)" :
+-                    [ SHELL "$(tool-command-string) -dumpversion" ] ] ;
++                    [ SHELL "$(tool-command-string) -dumpfullversion -dumpversion" ] ] ;
+                 if $(tool-version) != $(version)
+                 {
+                     # Permit a match betwen a two-digit version specified by the
+@@ -178,7 +178,7 @@ rule init ( version ? : command * : options * )
+         local machine = [ MATCH "^([^ ]+)" :
+             [ SHELL "$(command-string) -dumpmachine" ] ] ;
+         version ?= [ MATCH "^([0-9.]+)" :
+-            [ SHELL "$(command-string) -dumpversion" ] ] ;
++            [ SHELL "$(command-string) -dumpfullversion -dumpversion" ] ] ;
+         switch $(machine:L)
+         {
+             case *mingw* : flavor ?= mingw ;
+diff --git a/src/tools/gcc.py b/src/tools/gcc.py
+index 270ca97..ee8479d 100644
+--- a/src/tools/gcc.py
++++ b/src/tools/gcc.py
+@@ -121,7 +121,7 @@ def init(version = None, command = None, options = None):
+         machine_info = subprocess.Popen(command + ['-dumpmachine'], stdout=subprocess.PIPE).communicate()[0]
+         machine = __machine_match.search(machine_info).group(1)
+ 
+-        version_info = subprocess.Popen(command + ['-dumpversion'], stdout=subprocess.PIPE).communicate()[0]
++        version_info = subprocess.Popen(command + ['-dumpfullversion'] + ['-dumpversion'], stdout=subprocess.PIPE).communicate()[0]
+         version = __version_match.search(version_info).group(1)
+         if not flavor and machine.find('mingw') != -1:
+             flavor = 'mingw'
