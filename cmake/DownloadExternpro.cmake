@@ -59,13 +59,15 @@ set(
   modules/cmscopyfiles.cmake
   # patches/boost.build.1_63.patch
   # patches/ffmpeg_2.6.2.1.patch
-  # patches/glew_1.13.0.patch
+  patches/glew_1.13.0.patch
   # projects/boost1_63.cmake
   # projects/ffmpeg_2.6.2.1.cmake
-  # projects/glew_1.13.0.cmake
+  projects/glew.cmake
+  projects/glew_1.13.0.cmake
   # patch.cmake is required by the externpro/ovsrpro build process to implement
   # the patch step.
   projects/patch.cmake
+  projects/use/usexp-glew-config.cmake
   projects/use/usexp-patch-config.cmake
 )
 foreach(f IN LISTS files)
