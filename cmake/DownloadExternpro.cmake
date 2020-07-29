@@ -52,23 +52,36 @@ endfunction()
 
 set(
   files
+  modules/cmsappendsuffix.cmake
+  modules/cmscopyfiles.cmake
+  modules/Findscript.cmake.in
   modules/macpro.cmake
   modules/xpfunmac.cmake
-  modules/Findscript.cmake.in
   modules/xpopts.cmake.in
-  modules/cmscopyfiles.cmake
-  # patches/boost.build.1_63.patch
-  # patches/ffmpeg_2.6.2.1.patch
-  patches/glew_1.13.0.patch
+
+  # Patch is required for the build process to patch some projects.
+  projects/patch.cmake
+  projects/use/usexp-patch-config.cmake
+
   # projects/boost1_63.cmake
-  # projects/ffmpeg_2.6.2.1.cmake
+  # patches/boost.build.1_63.patch
+
+  # FFMPEG and its dependencies
+  projects/ffmpeg.cmake
+  projects/ffmpeg_2.6.2.cmake
+  projects/use/usexp-ffmpeg-config.cmake
+  patches/ffmpeg_2.6.2.patch
+  projects/openh264.cmake
+  projects/use/usexp-openh264-config.cmake
+  patches/openh264_1.4.0.patch
+  projects/yasm.cmake
+  patches/yasm.patch
+
+  # GLEW and its dependencies
   projects/glew.cmake
   projects/glew_1.13.0.cmake
-  # patch.cmake is required by the externpro/ovsrpro build process to implement
-  # the patch step.
-  projects/patch.cmake
+  patches/glew_1.13.0.patch
   projects/use/usexp-glew-config.cmake
-  projects/use/usexp-patch-config.cmake
 )
 foreach(f IN LISTS files)
   download_externpro_file(${f})

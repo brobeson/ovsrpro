@@ -1,0 +1,110 @@
+# WARNING
+# This file is downloaded and modified by CMake.
+# Manual edits will be overwritten.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8df871c..a18ef76 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,13 +35,27 @@ INCLUDE_DIRECTORIES(AFTER ${CMAKE_BINARY_DIR} ${yasm_SOURCE_DIR})
+ 
+ INCLUDE(ConfigureChecks.cmake)
+ 
++OPTION(INSTALL_YASM_ONLY "Only install the yasm executable" OFF)
++
++IF(DEFINED YASM_VER)
++  SET(ver _${YASM_VER})
++  SET(verDir /${PROJECT_NAME}${ver})
++ENDIF()
++SET(targetsFile ${PROJECT_NAME}${ver}-targets)
++
+ ADD_SUBDIRECTORY(tools)
+ ADD_SUBDIRECTORY(libyasm)
+ ADD_SUBDIRECTORY(modules)
+ ADD_SUBDIRECTORY(frontends)
+ 
++IF(NOT INSTALL_YASM_ONLY)
++
++INSTALL(EXPORT ${targetsFile} DESTINATION bin/cmake)
++
+ INSTALL(FILES
+     libyasm.h
+     ${CMAKE_BINARY_DIR}/libyasm-stdint.h
+-    DESTINATION include
++    DESTINATION include${verDir}
+     )
++
++ENDIF(INSTALL_YASM_ONLY)
+diff --git a/frontends/tasm/CMakeLists.txt b/frontends/tasm/CMakeLists.txt
+index e275ab8..7d27511 100644
+--- a/frontends/tasm/CMakeLists.txt
++++ b/frontends/tasm/CMakeLists.txt
+@@ -30,8 +30,12 @@ ELSE(BUILD_SHARED_LIBS)
+     TARGET_LINK_LIBRARIES(ytasm yasmstd libyasm)
+ ENDIF(BUILD_SHARED_LIBS)
+ 
++SET_TARGET_PROPERTIES(ytasm PROPERTIES OUTPUT_NAME ytasm${ver})
++
+ SET_SOURCE_FILES_PROPERTIES(tasm.c PROPERTIES
+     OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/license.c
+     )
+ 
+-INSTALL(TARGETS ytasm RUNTIME DESTINATION bin)
++IF(NOT INSTALL_YASM_ONLY)
++INSTALL(TARGETS ytasm EXPORT ${targetsFile} RUNTIME DESTINATION bin)
++ENDIF(INSTALL_YASM_ONLY)
+diff --git a/frontends/vsyasm/CMakeLists.txt b/frontends/vsyasm/CMakeLists.txt
+index 6815b18..46f9edf 100644
+--- a/frontends/vsyasm/CMakeLists.txt
++++ b/frontends/vsyasm/CMakeLists.txt
+@@ -34,4 +34,8 @@ SET_SOURCE_FILES_PROPERTIES(vsyasm.c PROPERTIES
+     OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/license.c
+     )
+ 
+-INSTALL(TARGETS vsyasm RUNTIME DESTINATION bin)
++SET_TARGET_PROPERTIES(vsyasm PROPERTIES OUTPUT_NAME vsyasm${ver})
++
++IF(NOT INSTALL_YASM_ONLY)
++INSTALL(TARGETS vsyasm EXPORT ${targetsFile} RUNTIME DESTINATION bin)
++ENDIF(INSTALL_YASM_ONLY)
+diff --git a/frontends/yasm/CMakeLists.txt b/frontends/yasm/CMakeLists.txt
+index b11d7f8..cf51fea 100644
+--- a/frontends/yasm/CMakeLists.txt
++++ b/frontends/yasm/CMakeLists.txt
+@@ -31,4 +31,6 @@ SET_SOURCE_FILES_PROPERTIES(yasm.c PROPERTIES
+     OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/license.c
+     )
+ 
+-INSTALL(TARGETS yasm RUNTIME DESTINATION bin)
++SET_TARGET_PROPERTIES(yasm PROPERTIES OUTPUT_NAME yasm${ver})
++
++INSTALL(TARGETS yasm EXPORT ${targetsFile} RUNTIME DESTINATION bin)
+diff --git a/libyasm/CMakeLists.txt b/libyasm/CMakeLists.txt
+index bd9b7b2..8cfae97 100644
+--- a/libyasm/CMakeLists.txt
++++ b/libyasm/CMakeLists.txt
+@@ -38,11 +38,14 @@ IF(BUILD_SHARED_LIBS)
+         )
+ ELSE(BUILD_SHARED_LIBS)
+     SET_TARGET_PROPERTIES(libyasm PROPERTIES
++        OUTPUT_NAME "yasm${ver}"
+         COMPILE_FLAGS -DYASM_LIB_SOURCE
+         )
+ ENDIF(BUILD_SHARED_LIBS)
+ 
+-INSTALL(TARGETS libyasm
++IF(NOT INSTALL_YASM_ONLY)
++
++INSTALL(TARGETS libyasm EXPORT ${targetsFile}
+     RUNTIME DESTINATION bin
+     LIBRARY DESTINATION lib
+     ARCHIVE DESTINATION lib
+@@ -76,5 +79,7 @@ INSTALL(FILES
+     symrec.h
+     valparam.h
+     value.h
+-    DESTINATION include/libyasm
++    DESTINATION include${verDir}/libyasm
+     )
++
++ENDIF(INSTALL_YASM_ONLY)
