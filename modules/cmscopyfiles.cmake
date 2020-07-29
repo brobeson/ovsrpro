@@ -1,3 +1,7 @@
+# WARNING
+# This file is downloaded and modified by CMake.
+# Manual edits will be overwritten.
+
 if(NOT EXISTS ${dst})
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${dst})
 endif()

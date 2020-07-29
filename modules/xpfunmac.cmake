@@ -1,3 +1,7 @@
+# WARNING
+# This file is downloaded and modified by CMake.
+# Manual edits will be overwritten.
+
 ########################################
 # xpfunmac.cmake
 #  xp prefix = intended to be used both internally (by ovsrpro) and externally

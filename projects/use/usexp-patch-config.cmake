@@ -1,3 +1,7 @@
+# WARNING
+# This file is downloaded and modified by CMake.
+# Manual edits will be overwritten.
+
 # PATCH_FOUND - patch was found
 # PATCH_EXE - the patch executable
 # PATCH_CMD - the patch command

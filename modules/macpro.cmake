@@ -1,3 +1,7 @@
+# WARNING
+# This file is downloaded and modified by CMake.
+# Manual edits will be overwritten.
+
 ########################################
 # macpro.cmake
 #  mac = macros

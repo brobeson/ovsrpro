@@ -1,3 +1,7 @@
+# WARNING
+# This file is downloaded and modified by CMake.
+# Manual edits will be overwritten.
+
 # - Find an @CMAKE_PROJECT_NAME@ installation.
 # @CMAKE_PROJECT_NAME@_DIR
 ################################################################################

@@ -1,3 +1,7 @@
+# WARNING
+# This file is downloaded and modified by CMake.
+# Manual edits will be overwritten.
+
 # patch (aka patcz)
 # * renamed to patcz on MSW because of MSFT boneheadedness:
 #   any exe with "setup" "install" "update" "patch" is flagged to be run as administrator
