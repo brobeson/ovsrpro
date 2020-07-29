@@ -63,9 +63,9 @@ function(patch_patch)
 endfunction()
 ########################################
 function(build_patch)
-  configure_file(${PRO_DIR}/use/usexp-patch-config.cmake ${STAGE_DIR}/share/cmake/
-    @ONLY NEWLINE_STYLE LF
-    )
+  #configure_file(${PRO_DIR}/use/usexp-patch-config.cmake ${STAGE_DIR}/share/cmake/
+    #@ONLY NEWLINE_STYLE LF
+    #)
   get_filename_component(patchExe ${PATCH_EXE} NAME)
   ExternalProject_Add(patch_bld DEPENDS patch
     DOWNLOAD_COMMAND "" DOWNLOAD_DIR ${NULL_DIR} CONFIGURE_COMMAND ""

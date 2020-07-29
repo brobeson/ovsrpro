@@ -65,9 +65,9 @@ function(build_boost)
     ${zlibTgts}
     ${bzip2Tgts}
     )
-  configure_file(${PRO_DIR}/use/usexp-boost-config.cmake ${STAGE_DIR}/share/cmake/
-    @ONLY NEWLINE_STYLE LF
-    )
+  #configure_file(${PRO_DIR}/use/usexp-boost-config.cmake ${STAGE_DIR}/share/cmake/
+    #@ONLY NEWLINE_STYLE LF
+    #)
   foreach(ver ${BOOST_VERSIONS})
     string(REGEX REPLACE "([0-9]+)\\.([0-9]+)(\\.[0-9]+)?" "\\1_\\2" ver2_ ${ver})
     ExternalProject_Get_Property(boost${ver2_} SOURCE_DIR)

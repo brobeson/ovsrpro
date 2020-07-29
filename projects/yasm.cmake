@@ -34,9 +34,9 @@ function(build_yasm)
   if(DEFINED XP_YASM_COMPLETE_PKG)
     xpGetArgValue(${PRO_YASM} ARG VER VALUE VER)
     list(APPEND XP_CONFIGURE -DYASM_VER=${VER})
-    configure_file(${PRO_DIR}/use/usexp-yasm-config.cmake ${STAGE_DIR}/share/cmake/
-      @ONLY NEWLINE_STYLE LF
-      )
+    #configure_file(${PRO_DIR}/use/usexp-yasm-config.cmake ${STAGE_DIR}/share/cmake/
+      #@ONLY NEWLINE_STYLE LF
+      #)
   endif()
   set(BUILD_CONFIGS Release) # we only need a release executable
   xpCmakeBuild(yasm "" "${XP_CONFIGURE}" yasmTargets)

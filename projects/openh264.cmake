@@ -41,9 +41,9 @@ function(build_openh264)
     -DOPENH264_VER=${VER}
     -DCMAKE_ASM_NASM_COMPILER=${YASM_EXE}
     )
-  configure_file(${PRO_DIR}/use/usexp-openh264-config.cmake ${STAGE_DIR}/share/cmake/
-    @ONLY NEWLINE_STYLE LF
-    )
+  #configure_file(${PRO_DIR}/use/usexp-openh264-config.cmake ${STAGE_DIR}/share/cmake/
+    #@ONLY NEWLINE_STYLE LF
+    #)
   xpCmakeBuild(openh264 "${yasmTgts}" "${XP_CONFIGURE}" openh264Targets)
   if(ARGN)
     set(${ARGN} "${openh264Targets}" PARENT_SCOPE)

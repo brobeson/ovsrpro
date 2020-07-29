@@ -29,9 +29,9 @@ function(build_bzip2)
     return()
   endif()
   xpGetArgValue(${PRO_BZIP2} ARG VER VALUE VER)
-  configure_file(${PRO_DIR}/use/usexp-bzip2-config.cmake ${STAGE_DIR}/share/cmake/
-    @ONLY NEWLINE_STYLE LF
-    )
+  #configure_file(${PRO_DIR}/use/usexp-bzip2-config.cmake ${STAGE_DIR}/share/cmake/
+    #@ONLY NEWLINE_STYLE LF
+    #)
   xpCmakeBuild(bzip2 "" "-DBZIP2_VER=${VER}" bzip2Targets)
   if(ARGN)
     set(${ARGN} "${bzip2Targets}" PARENT_SCOPE)

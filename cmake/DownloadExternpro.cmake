@@ -58,7 +58,6 @@ set(
   modules/xpfunmac.cmake
   modules/xpopts.cmake.in
   projects/patch.cmake
-  projects/use/usexp-patch-config.cmake
 
   # Boost and its dependencies
   # TODO Try to figure out how to remove the requirement on Boost 1.67. It's
@@ -75,7 +74,6 @@ set(
   projects/boostmpl1_67.cmake
   projects/boostunits1_63.cmake
   projects/boostunits1_67.cmake
-  projects/use/usexp-boost-config.cmake
   patches/boost.build.1_63.patch
   patches/boost.gil.1_63.patch
   patches/boost.gil.1_67.patch
@@ -85,10 +83,8 @@ set(
   patches/boost.units.1_63.patch
   patches/boost.units.1_67.patch
   projects/bzip2.cmake
-  projects/use/usexp-bzip2-config.cmake
   patches/bzip2.patch
   projects/zlib.cmake
-  projects/use/usexp-zlib-config.cmake
   patches/zlib.patch
   modules/flags.cmake
 
@@ -96,10 +92,8 @@ set(
   modules/cmsappendsuffix.cmake
   projects/ffmpeg.cmake
   projects/ffmpeg_2.6.2.cmake
-  projects/use/usexp-ffmpeg-config.cmake
   patches/ffmpeg_2.6.2.patch
   projects/openh264.cmake
-  projects/use/usexp-openh264-config.cmake
   patches/openh264_1.4.0.patch
   projects/yasm.cmake
   patches/yasm.patch
@@ -108,7 +102,6 @@ set(
   projects/glew.cmake
   projects/glew_1.13.0.cmake
   patches/glew_1.13.0.patch
-  projects/use/usexp-glew-config.cmake
 )
 foreach(f IN LISTS files)
   download_externpro_file(${f})
@@ -117,3 +110,44 @@ endforeach()
 
 replace_in_file("${CMAKE_SOURCE_DIR}/modules/macpro.cmake" externpro ovsrpro)
 replace_in_file("${CMAKE_SOURCE_DIR}/modules/xpfunmac.cmake" externpro ovsrpro)
+
+replace_in_file(
+  "${CMAKE_SOURCE_DIR}/projects/boost.cmake"
+  "configure_file(\${PRO_DIR}/use/usexp-boost-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
+  "#configure_file(\${PRO_DIR}/use/usexp-boost-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
+)
+replace_in_file(
+  "${CMAKE_SOURCE_DIR}/projects/bzip2.cmake"
+  "configure_file(\${PRO_DIR}/use/usexp-bzip2-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
+  "#configure_file(\${PRO_DIR}/use/usexp-bzip2-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
+)
+replace_in_file(
+  "${CMAKE_SOURCE_DIR}/projects/ffmpeg.cmake"
+  "configure_file(\${PRO_DIR}/use/usexp-ffmpeg-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
+  "#configure_file(\${PRO_DIR}/use/usexp-ffmpeg-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
+)
+replace_in_file(
+  "${CMAKE_SOURCE_DIR}/projects/glew.cmake"
+  "configure_file(\${PRO_DIR}/use/usexp-glew-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
+  "#configure_file(\${PRO_DIR}/use/usexp-glew-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
+)
+replace_in_file(
+  "${CMAKE_SOURCE_DIR}/projects/openh264.cmake"
+  "configure_file(\${PRO_DIR}/use/usexp-openh264-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
+  "#configure_file(\${PRO_DIR}/use/usexp-openh264-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
+)
+replace_in_file(
+  "${CMAKE_SOURCE_DIR}/projects/patch.cmake"
+  "configure_file(\${PRO_DIR}/use/usexp-patch-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
+  "#configure_file(\${PRO_DIR}/use/usexp-patch-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
+)
+replace_in_file(
+  "${CMAKE_SOURCE_DIR}/projects/yasm.cmake"
+  "configure_file(\${PRO_DIR}/use/usexp-yasm-config.cmake \${STAGE_DIR}/share/cmake/\n      @ONLY NEWLINE_STYLE LF\n      )"
+  "#configure_file(\${PRO_DIR}/use/usexp-yasm-config.cmake \${STAGE_DIR}/share/cmake/\n      #@ONLY NEWLINE_STYLE LF\n      #)"
+)
+replace_in_file(
+  "${CMAKE_SOURCE_DIR}/projects/zlib.cmake"
+  "configure_file(\${PRO_DIR}/use/usexp-zlib-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
+  "#configure_file(\${PRO_DIR}/use/usexp-zlib-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
+)
