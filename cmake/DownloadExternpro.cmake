@@ -1,17 +1,8 @@
-option(
-  ovsrpro_download_externpro
-  "Download files from externpro. Turn this off if you need to debug those files. Otherwise, it should remain on."
-  on
-)
-mark_as_advanced(ovsrpro_download_externpro)
-if(NOT ovsrpro_download_externpro)
-  message(
-    AUTHOR_WARNING
-    "Externpro files will not be downloaded. This should only be skipped to "
-    "troubleshoot issues with the existing externpro files. If this was "
-    "disabled by mistake, set ovsrpro_download_externpro to true."
-  )
-  return()
+option(verbose "Show details when downloading externpro files." off)
+if(verbose)
+  set(SHOW_PROGRESS "SHOW_PROGRESS")
+else()
+  unset(SHOW_PROGRESS)
 endif()
 
 function(download_externpro_file file_path)
@@ -21,7 +12,7 @@ function(download_externpro_file file_path)
     DOWNLOAD
     "https://raw.githubusercontent.com/smanders/externpro/18.08.4/${file_path}"
     "${CMAKE_SOURCE_DIR}/${file_path}"
-    SHOW_PROGRESS
+    ${SHOW_PROGRESS}
     STATUS download_status
   )
   list(GET download_status 0 exit_code)

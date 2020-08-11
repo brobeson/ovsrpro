@@ -141,3 +141,20 @@ For custom builds, the following CMake options are available:
 | `XP_DEFAULT` | `on` | Compiles all of the available packages. To only compile a subset of the packages, set `XP_DEFAULT=off` and specify the individual packages desired. This is easier to do using cmake-gui or ccmake. |
 | `XP_STEP` | `patch` | Specify which steps to complete of the build process. See the [externpro documentation](https://github.com/smanders/externpro/blob/master/README.md) for available options. |
 <!-- markdownlint-enable MD013 -->
+
+The `XP_STEP` option must be set to a value from a set. Here are the possible values:
+
+- `download_externpro` - This step downloads necessary files from externpro
+  and modifies them for use by ovsrpro. The files are committed to the
+  repository, so this is only needed when upgrading externpro or projects used
+  in externpro.
+  - This exposes an additional boolean option, `verbose`. If `verbose` is
+    enabled, the download progress is displaed. `verbose` is off by default.
+- `mkpatch` - This creates targets that will clone project repositories and
+  checkout the necessary commit. This is useful to create modify the source
+  code and use Git to create patch files.
+- `download` - This step creates targets to download the project source archives.
+- `patch` - This step implies `download`. It also unpacks the source archives
+  and applies patch files located in [*patches/*](patches/).
+- `build` - This step implies `download` and `patch`. In addition, it creates
+  targets to actually build the projects.

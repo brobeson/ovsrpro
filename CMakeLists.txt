@@ -5,7 +5,13 @@ if(NOT CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 # Download some files from externpro and modify them in place.
-include(cmake/DownloadExternpro.cmake)
+if(DEFINED XP_STEP)
+  string(TOLOWER "${XP_STEP}" lowercase_step)
+  if(lowercase_step STREQUAL "download_externpro")
+    include(cmake/DownloadExternpro.cmake)
+    return()
+  endif()
+endif()
 
 include(modules/macpro.cmake)
 proInit()
