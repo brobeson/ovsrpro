@@ -1,0 +1,76 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..c7bf4b7
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,4 @@
++cmake_minimum_required(VERSION 3.0)
++project(glew)
++include(flags OPTIONAL)
++add_subdirectory(build/cmake)
+diff --git a/build/cmake/CMakeLists.txt b/build/cmake/CMakeLists.txt
+index 1563f9f..638bae4 100644
+--- a/build/cmake/CMakeLists.txt
++++ b/build/cmake/CMakeLists.txt
+@@ -2,15 +2,19 @@ if ( NOT DEFINED CMAKE_BUILD_TYPE )
+   set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type" )
+ endif ()
+ 
++if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+ project (glew)
+ 
+ cmake_minimum_required (VERSION 2.4)
++endif()
+ 
+ if (COMMAND cmake_policy)
+   cmake_policy (SET CMP0003 NEW)
+ endif()
+ 
+-set(CMAKE_DEBUG_POSTFIX d)
++if (NOT DEFINED CMAKE_DEBUG_POSTFIX)
++  set(CMAKE_DEBUG_POSTFIX d)
++endif ()
+ 
+ option (BUILD_UTILS "utilities" ON)
+ 
+@@ -64,7 +68,7 @@ else()
+   target_compile_definitions(glewmx INTERFACE "GLEW_MX")
+   target_compile_definitions(glewmx_s INTERFACE "GLEW_STATIC;GLEW_MX")
+   foreach(t glew glew_s glewmx glewmx_s)
+-    target_include_directories(${t} PUBLIC $<INSTALL_INTERFACE:include>)
++    target_include_directories(${t} PUBLIC $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
+   endforeach()
+   set(MAYBE_EXPORT EXPORT glew-targets)
+ endif()
+@@ -110,21 +114,24 @@ set (cflags "-DGLEW_MX")
+ set (libname ${GLEW_LIB_NAME}mx)
+ configure_file (${GLEW_DIR}/glew.pc.in ${GLEW_DIR}/glewmx.pc @ONLY)
+ 
+-install(FILES ${GLEW_DIR}/glew.pc ${GLEW_DIR}/glewmx.pc
+-        DESTINATION lib/pkgconfig
+-)
+-
+ install (FILES
+     ${GLEW_DIR}/include/GL/wglew.h
+     ${GLEW_DIR}/include/GL/glew.h
+     ${GLEW_DIR}/include/GL/glxew.h
+-    DESTINATION include/GL)
++    DESTINATION include/${PROJECT_NAME}/GL)
+ 
+ if(MAYBE_EXPORT)
+-  install(EXPORT glew-targets DESTINATION lib/cmake/glew
++  include(CMakePackageConfigHelpers)
++  write_basic_package_version_file(
++    "${CMAKE_CURRENT_SOURCE_DIR}/glew-config-version.cmake"
++    VERSION ${GLEW_VERSION}
++    COMPATIBILITY SameMajorVersion
++  )
++  install(EXPORT glew-targets DESTINATION lib/cmake
+     NAMESPACE GLEW::)
+   install(FILES
+       ${CMAKE_CURRENT_SOURCE_DIR}/glew-config.cmake
++      ${CMAKE_CURRENT_SOURCE_DIR}/glew-config-version.cmake
+       ${CMAKE_CURRENT_SOURCE_DIR}/CopyImportedTargetProperties.cmake
+-    DESTINATION lib/cmake/glew)
++    DESTINATION lib/cmake/)
+ endif()

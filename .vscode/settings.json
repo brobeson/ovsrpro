@@ -3,6 +3,7 @@
         "XP_STEP": "build"
     },
     "cSpell.words": [
+        "GLEW",
         "STGZ",
         "Scrn",
         "Xtst",
@@ -13,6 +14,7 @@
         "externpro",
         "fontconfig",
         "freetype",
+        "glewmx",
         "gperf",
         "javac",
         "markdownlint",

@@ -97,11 +97,6 @@ set(
   patches/openh264_1.4.0.patch
   projects/yasm.cmake
   patches/yasm.patch
-
-  # GLEW and its dependencies
-  projects/glew.cmake
-  projects/glew_1.13.0.cmake
-  patches/glew_1.13.0.patch
 )
 foreach(f IN LISTS files)
   download_externpro_file(${f})
@@ -125,11 +120,6 @@ replace_in_file(
   "${CMAKE_SOURCE_DIR}/projects/ffmpeg.cmake"
   "configure_file(\${PRO_DIR}/use/usexp-ffmpeg-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
   "#configure_file(\${PRO_DIR}/use/usexp-ffmpeg-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
-)
-replace_in_file(
-  "${CMAKE_SOURCE_DIR}/projects/glew.cmake"
-  "configure_file(\${PRO_DIR}/use/usexp-glew-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
-  "#configure_file(\${PRO_DIR}/use/usexp-glew-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
 )
 replace_in_file(
   "${CMAKE_SOURCE_DIR}/projects/openh264.cmake"
