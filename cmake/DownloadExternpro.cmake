@@ -84,8 +84,8 @@ set(
   projects/ffmpeg.cmake
   projects/ffmpeg_2.6.2.cmake
   patches/ffmpeg_2.6.2.patch
-  projects/openh264.cmake
-  patches/openh264_1.4.0.patch
+  # projects/openh264.cmake
+  # patches/openh264_1.4.0.patch
   projects/yasm.cmake
   patches/yasm.patch
 )
@@ -112,11 +112,11 @@ replace_in_file(
   "configure_file(\${PRO_DIR}/use/usexp-ffmpeg-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
   "#configure_file(\${PRO_DIR}/use/usexp-ffmpeg-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
 )
-replace_in_file(
-  "${CMAKE_SOURCE_DIR}/projects/openh264.cmake"
-  "configure_file(\${PRO_DIR}/use/usexp-openh264-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
-  "#configure_file(\${PRO_DIR}/use/usexp-openh264-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
-)
+# replace_in_file(
+#   "${CMAKE_SOURCE_DIR}/projects/openh264.cmake"
+#   "configure_file(\${PRO_DIR}/use/usexp-openh264-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
+#   "#configure_file(\${PRO_DIR}/use/usexp-openh264-config.cmake \${STAGE_DIR}/share/cmake/\n    #@ONLY NEWLINE_STYLE LF\n    #)"
+# )
 replace_in_file(
   "${CMAKE_SOURCE_DIR}/projects/patch.cmake"
   "configure_file(\${PRO_DIR}/use/usexp-patch-config.cmake \${STAGE_DIR}/share/cmake/\n    @ONLY NEWLINE_STYLE LF\n    )"
