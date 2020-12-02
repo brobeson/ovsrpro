@@ -11,7 +11,7 @@
 # path (e.g. C:/Program Files/ovsrpro 0.0.1-vc120-64/qt5)
 ########################################
 xpProOption(qt5)
-set(QT5_VER 5.10.0)
+set(QT5_VER 5.12.10)
 set(QT5_REPO http://code.qt.io/cgit/qt/qt5.git)
 set(QT5_DOWNLOAD_FILE qt-everywhere-src-${QT5_VER}.tar.xz)
 set(PRO_QT5
@@ -23,8 +23,8 @@ set(PRO_QT5
   VER ${QT5_VER}
   GIT_ORIGIN ${QT5_REPO}
   GIT_TAG v${QT5_VER}
-  DLURL http://download.qt.io/archive/qt/5.10/${QT5_VER}/single/${QT5_DOWNLOAD_FILE}
-  DLMD5 c5e275ab0ed7ee61d0f4b82cd471770d
+  DLURL http://download.qt.io/archive/qt/5.12/${QT5_VER}/single/${QT5_DOWNLOAD_FILE}
+  DLMD5 a781a0e247400e764c0730b8fb54226f
 )
 
 #######################################
@@ -67,7 +67,6 @@ macro(setConfigureOptions)
     list(APPEND QT5_CONFIGURE -platform linux-g++
       -c++std c++14
       -qt-xcb
-      -qt-xkbcommon-x11
       -fontconfig
       -optimized-qmake
       -verbose
@@ -171,7 +170,6 @@ function(build_qt5)
     SOURCE_DIR ${NULL_DIR} CONFIGURE_COMMAND "" BUILD_COMMAND ""
     INSTALL_COMMAND
       ${CMAKE_COMMAND} -E make_directory ${STAGE_DIR}/share/qt5 &&
-      ${CMAKE_COMMAND} -E copy ${SOURCE_DIR}/LGPL_EXCEPTION.txt ${STAGE_DIR}/share/qt5 &&
       ${CMAKE_COMMAND} -E copy ${SOURCE_DIR}/LICENSE.FDL ${STAGE_DIR}/share/qt5 &&
       ${CMAKE_COMMAND} -E copy ${SOURCE_DIR}/LICENSE.GPLv2 ${STAGE_DIR}/share/qt5 &&
       ${CMAKE_COMMAND} -E copy ${SOURCE_DIR}/LICENSE.GPLv3 ${STAGE_DIR}/share/qt5 &&
