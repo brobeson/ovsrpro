@@ -49,7 +49,7 @@ function(build_qwt)
 
   # In the configure step invoke qmake from the QT5 that was just built
   ExternalProject_Get_Property(qwt SOURCE_DIR)
-  ExternalProject_Add(qwt_build DEPENDS qwt qt5_build
+  ExternalProject_Add(qwt_build DEPENDS qwt qt5_install_files
     DOWNLOAD_COMMAND "" DOWNLOAD_DIR ${NULL_DIR}
     SOURCE_DIR ${SOURCE_DIR}
     CONFIGURE_COMMAND ${STAGE_DIR}/qt5/bin/qmake qwt.pro "INSTALL_PATH=${STAGE_DIR}" "STATIC_BUILD=${STATIC_FLAG}"
