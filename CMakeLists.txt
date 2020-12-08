@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.4)
 project(ovsrpro)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}) # Findexternpro.cmake
-set(externpro_REV 18.01.1)
+set(externpro_REV 18.01.2)
 find_package(externpro REQUIRED)
 list(APPEND CMAKE_MODULE_PATH ${externpro_DIR}/share/cmake)
 include(macpro)
