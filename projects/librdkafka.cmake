@@ -17,7 +17,6 @@ set(PRO_LIBRDKAFKA
   GIT_TAG ${VER} # what to 'git checkout'
   GIT_REF ${VER} # create path from this tag to 'git checkout'
   DLURL ${REPO_UPSTREAM}/archive/${VER}.tar.gz
-  https://github.com/edenhill/librdkafka/archive/v1.5.3.tar.gz
   DLMD5 17017d9bdaf1398087d1f0dcad2e5cc7
   DLNAME librdkafka-${VER}.tar.gz
   #PATCH ${PATCH_DIR}/librdkafka.patch
